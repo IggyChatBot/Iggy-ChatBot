@@ -42,16 +42,16 @@ def ask_gemini(user_message, faq_context=None):
     if not gemini_model:
         return None
     try:
-        prompt = user_message
         if faq_context:
-            prompt = f"""The user asked: "{user_message}"
-
-Here is relevant information from the ICCT database:
-{faq_context['answer']}
-
-Using this information, give a helpful and friendly response as Iggy."""
-
-       response = gemini_model.models.generate_content(
+            prompt = (
+                f'The user asked: "{user_message}"\n\n'
+                f'Here is relevant information from the ICCT database:\n'
+                f'{faq_context["answer"]}\n\n'
+                f'Using this information, give a helpful and friendly response as Iggy.'
+            )
+        else:
+            prompt = user_message
+        response = gemini_model.models.generate_content(
             model="gemini-2.0-flash",
             contents=prompt
         )
