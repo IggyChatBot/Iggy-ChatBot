@@ -52,7 +52,7 @@ Here is relevant information from the ICCT database:
 Using this information, give a helpful and friendly response as Iggy."""
 
        response = gemini_model.models.generate_content(
-            model='gemini-2.0-flash',
+            model="gemini-2.0-flash",
             contents=prompt
         )
         return response.text
