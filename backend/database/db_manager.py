@@ -249,3 +249,32 @@ class DatabaseManager:
             sessions = cur.fetchone()[0]
 
         return {"total_messages": total, "unique_sessions": sessions, "top_intents": intents}
+        
+# ── User Auth ──────────────────────────────────────────────────
+    def get_user_by_email(self, email: str) -> dict | None:
+        with self._get_conn() as conn:
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM users WHERE email = ?", (email,))
+            row = cur.fetchone()
+            return dict(row) if row else None
+
+    def create_user(self, user: dict) -> bool:
+        try:
+            with self._get_conn() as conn:
+                conn.execute(
+                    """INSERT INTO users (id, first_name, last_name, email, student_id, password)
+                       VALUES (?, ?, ?, ?, ?, ?)""",
+                    (
+                        user['id'],
+                        user['first_name'],
+                        user['last_name'],
+                        user['email'],
+                        user.get('student_id', ''),
+                        user['password']
+                    )
+                )
+                conn.commit()
+            return True
+        except Exception as e:
+            logger.error(f"DatabaseManager: create_user failed — {e}")
+            return False
