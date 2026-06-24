@@ -29,11 +29,34 @@ const ChatApp = (() => {
   const status   = () => document.getElementById('bot-status');
 
   // ── Init ──────────────────────────────────────────────────────
-  function init() {
+ function init() {
     Utils.saveLocal('icct_session', sessionId);
     Chat.renderWelcome();
     _bindEvents();
     _checkBackendHealth();
+    _loadProfile();
+  }
+
+  function _loadProfile() {
+    const user = Utils.loadLocal('icct_user');
+    const token = Utils.loadLocal('icct_token');
+    const isGuest = Utils.loadLocal('icct_guest');
+
+    if (user) {
+      const initials = (user.first_name?.[0] || '') + (user.last_name?.[0] || '');
+      document.getElementById('profile-avatar').textContent    = initials || '👤';
+      document.getElementById('profile-avatar-lg').textContent = initials || '👤';
+      document.getElementById('profile-name').textContent      = user.first_name || 'User';
+      document.getElementById('profile-fullname').textContent  = `${user.first_name} ${user.last_name}`;
+      document.getElementById('profile-email').textContent     = user.email || '—';
+      document.getElementById('profile-studentid').textContent = user.student_id ? `ID: ${user.student_id}` : '';
+    } else if (isGuest) {
+      document.getElementById('profile-name').textContent = 'Guest';
+    }
+  }
+
+  function toggleProfile() {
+    document.getElementById('profile-dropdown').classList.toggle('open');
   }
 
   function _bindEvents() {
@@ -156,7 +179,7 @@ const ChatApp = (() => {
   // Auto-init when DOM is ready
   document.addEventListener('DOMContentLoaded', init);
 
-  return { sendMessage, sendSuggestion, clearChat, exportChat, logout };
+  return { sendMessage, sendSuggestion, clearChat, exportChat, logout, toggleProfile };
   function logout() {
   localStorage.removeItem('icct_token');
   localStorage.removeItem('icct_guest');
