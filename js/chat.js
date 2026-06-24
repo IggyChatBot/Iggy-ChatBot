@@ -16,7 +16,7 @@ const Chat = (() => {
         <div class="welcome-title">Welcome to ICCT Bot!</div>
         <div class="welcome-sub">
           I can help you with enrollment, courses, schedules, tuition, scholarships, and school policies.
-          <br/><br/>Select a topic on the left or type your question below.
+          <br/><br/>Type your question below or tap a suggestion above.
         </div>
       </div>`;
   }
