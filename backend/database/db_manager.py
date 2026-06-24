@@ -91,7 +91,7 @@ class DatabaseManager:
                     )
                 """)
 
-                # Feedback table
+               # Feedback table
                 cur.execute("""
                     CREATE TABLE IF NOT EXISTS feedback (
                         id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,6 +100,19 @@ class DatabaseManager:
                         rating      INTEGER NOT NULL,
                         comment     TEXT,
                         timestamp   TEXT    DEFAULT CURRENT_TIMESTAMP
+                    )
+                """)
+
+                # Users table
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS users (
+                        id          TEXT    PRIMARY KEY,
+                        first_name  TEXT    NOT NULL,
+                        last_name   TEXT    NOT NULL,
+                        email       TEXT    NOT NULL UNIQUE,
+                        student_id  TEXT,
+                        password    TEXT    NOT NULL,
+                        created_at  TEXT    DEFAULT CURRENT_TIMESTAMP
                     )
                 """)
 
