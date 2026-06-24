@@ -1,8 +1,5 @@
 """
 chat_routes.py – Chat API Routes
-Component 2: Back-End Server → Routes
-POST /api/chat  — receives a user message, runs NLP, queries DB, returns reply
-GET  /api/stats — returns interaction analytics
 """
 from flask import Blueprint, request, jsonify, current_app, g
 import logging
@@ -14,12 +11,17 @@ chat_bp = Blueprint('chat', __name__)
 
 # ── Configure Gemini ────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+gemini_model = None
+
 if GEMINI_API_KEY:
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)
-    gemini_model = gemini_client
-    logger.info("Gemini AI configured successfully.")
+    try:
+        gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+        gemini_model = gemini_client
+        logger.info("Gemini AI configured successfully.")
+    except Exception as e:
+        logger.error(f"Gemini setup failed: {e}")
+        gemini_model = None
 else:
-    gemini_model = None
     logger.warning("GEMINI_API_KEY not set — falling back to NLP engine only.")
 
 
@@ -33,10 +35,14 @@ def ask_gemini(user_message, faq_context=None):
                 f'The user asked: "{user_message}"\n\n'
                 f'Here is relevant information from the ICCT database:\n'
                 f'{faq_context["answer"]}\n\n'
-                f'Using this information, give a helpful and friendly response as Iggy.'
+                f'Using this information, give a helpful and friendly response as Iggy, '
+                f'the official AI chatbot of ICCT Colleges in Cainta, Rizal, Philippines.'
             )
         else:
-            prompt = user_message
+            prompt = (
+                f'You are Iggy, the friendly AI chatbot of ICCT Colleges in Cainta, Rizal, Philippines. '
+                f'Answer this question helpfully and concisely: {user_message}'
+            )
         response = gemini_model.models.generate_content(
             model="gemini-2.0-flash",
             contents=prompt
@@ -55,57 +61,53 @@ def chat():
         return jsonify({"error": "Message is required."}), 400
 
     user_message = data['message'].strip()[:500]
-    session_id   = data.get('session_id') or g.get('session_id', 'anonymous')
+    session_id = data.get('session_id') or g.get('session_id', 'anonymous')
 
     nlp = current_app.nlp_engine
-    db  = current_app.db_manager
+    db = current_app.db_manager
 
     try:
-        # Step 1: Search database for a matching FAQ
         db_context = None
         faq_match = db.search_faq(user_message)
         if faq_match:
             db_context = {"answer": faq_match["answer"]}
 
-        # Step 2: Try Gemini AI first
         gemini_reply = ask_gemini(user_message, db_context)
 
         if gemini_reply:
-            reply  = gemini_reply
+            reply = gemini_reply
             intent = "ai_response"
             source = "gemini"
             entities = {}
         else:
-            # Fallback to NLP engine if Gemini fails
-            result   = nlp.generate_response(user_message, db_context=db_context)
-            reply    = result["reply"]
-            intent   = result["intent"]
-            source   = result["source"]
+            result = nlp.generate_response(user_message, db_context=db_context)
+            reply = result["reply"]
+            intent = result["intent"]
+            source = result["source"]
             entities = result["entities"]
 
-        # Step 3: Log interaction
         db.log_interaction(
-            session_id   = session_id,
-            user_message = user_message,
-            bot_reply    = reply,
-            intent       = intent,
-            entities     = str(entities)
+            session_id=session_id,
+            user_message=user_message,
+            bot_reply=reply,
+            intent=intent,
+            entities=str(entities)
         )
 
         return jsonify({
-            "reply":      reply,
-            "intent":     intent,
-            "entities":   entities,
-            "source":     source,
+            "reply": reply,
+            "intent": intent,
+            "entities": entities,
+            "source": source,
             "session_id": session_id
         }), 200
 
     except Exception as e:
         logger.error(f"[chat] Unhandled error: {e}")
         return jsonify({
-            "reply":  "I'm having trouble processing your request right now. Please try again.",
+            "reply": "I'm having trouble processing your request right now. Please try again.",
             "intent": "error",
-            "error":  str(e)
+            "error": str(e)
         }), 500
 
 
