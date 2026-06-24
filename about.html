@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Iggy – ICCT Colleges Chatbot</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #1a4fa0;
+      --primary-dark:  #0e337a;
+      --primary-light: #e8effc;
+      --accent:        #f5a623;
+      --bg:            #f4f6fb;
+      --surface:       #ffffff;
+      --border:        #dde3f0;
+      --text:          #1c1e2e;
+      --text-muted:    #6b7280;
+      --font:          'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,.10);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-logo-img { width: 36px; height: 36px; object-fit: contain; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .brand-name { font-size: 15px; font-weight: 700; }
+    .brand-tagline { font-size: 11px; opacity: .75; }
+
+    .header-nav { display: flex; gap: 4px; }
+    .nav-link {
+      color: rgba(255,255,255,.8);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background .18s;
+    }
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255,255,255,.18);
+      color: #fff;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #2a6dd9 100%);
+      color: #fff;
+      text-align: center;
+      padding: 60px 24px 50px;
+    }
+
+    .hero-img {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,.25));
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+    .hero p  { font-size: 16px; opacity: .85; max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    /* ── Main Content ── */
+    .content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .card h2 { font-size: 20px; font-weight: 700; color: var(--primary); }
+    .card p  { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* ── Features Grid ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform .18s, box-shadow .18s;
+    }
+    .feature-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(26,79,160,.12);
+    }
+
+    .feature-icon { font-size: 28px; margin-bottom: 10px; }
+    .feature-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .feature-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── Team ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .team-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: transform .18s;
+    }
+    .team-card:hover { transform: translateY(-3px); }
+
+    .team-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+    }
+
+    .team-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .team-role { font-size: 11px; color: var(--text-muted); }
+
+    /* ── Tech Stack ── */
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .tech-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid #c0d4f5;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ── CTA ── */
+    .cta-card {
+      background: linear-gradient(135deg, var(--primary) 0%, #2a6dd9 100%);
+      color: #fff;
+      text-align: center;
+      border: none;
+    }
+
+    .cta-card h2 { color: #fff; margin-bottom: 10px; }
+    .cta-card p  { color: rgba(255,255,255,.85); margin-bottom: 24px; }
+
+    .cta-btn {
+      display: inline-block;
+      background: #fff;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 14px rgba(0,0,0,.15);
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 26px; }
+      .card { padding: 20px; }
+      .header-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="header-brand">
+      <img src="Iggy.png" alt="Iggy" class="brand-logo-img"/>
+      <div class="brand-text">
+        <span class="brand-name">ICCT Colleges</span>
+        <span class="brand-tagline">School Support System</span>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html" class="nav-link">Chat</a>
+      <a href="about.html" class="nav-link active">About</a>
+    </nav>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <img src="Iggy.png" alt="Iggy the ICCT Chatbot Mascot" class="hero-img"/>
+    <div class="hero-badge">Meet the Mascot</div>
+    <h1>Hi, I'm Iggy! 👋</h1>
+    <p>Your friendly AI-powered school assistant at ICCT Colleges — here to answer your questions anytime, day or night.</p>
+  </section>
+
+  <!-- ── Content ── -->
+  <main class="content">
+
+    <!-- About Iggy -->
+    <div class="card">
+      <div class="card-header">
+        <img src="Iggy.png" alt="Iggy" class="brand-logo-img"/>
+        <h2>Who is Iggy?</h2>
+      </div>
+      <p>
+        <strong>Iggy</strong> is the official AI chatbot mascot of <strong>ICCT Colleges</strong>. Designed as a smart robotic bird wearing a graduation cap, Iggy represents the fusion of technology and education — always ready to guide students, parents, and staff with accurate school information.
+      </p>
+      <p>
+        Iggy was developed as part of the capstone project <em>"Web-Based NLP-Driven Chatbot System for Automated School Inquiry and Support Services at ICCT Colleges"</em> by BS Information Technology students from the College of Computer Science.
+      </p>
+      <p>
+        Whether you need help with enrollment, course information, class schedules, tuition fees, or school policies — Iggy is available <strong>24 hours a day, 7 days a week</strong>, so you never have to wait in line or call the office again.
+      </p>
+    </div>
+
+    <!-- Features -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✨</div>
+        <h2>What Can Iggy Do?</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🎓</div>
+          <div class="feature-title">Enrollment Guidance</div>
+          <div class="feature-desc">Step-by-step help with the enrollment process, periods, and requirements.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Admission Requirements</div>
+          <div class="feature-desc">Lists all documents needed for new students and transferees.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📚</div>
+          <div class="feature-title">Course Information</div>
+          <div class="feature-desc">Details about all programs offered across ICCT colleges and departments.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🗓️</div>
+          <div class="feature-title">Class Schedules</div>
+          <div class="feature-desc">General schedule formats and how to access your personal timetable.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💰</div>
+          <div class="feature-title">Tuition & Fees</div>
+          <div class="feature-desc">Payment options, fee estimates, and installment information.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🏅</div>
+          <div class="feature-title">Scholarships</div>
+          <div class="feature-desc">Government and institutional scholarship programs and how to apply.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📜</div>
+          <div class="feature-title">School Policies</div>
+          <div class="feature-desc">Attendance rules, dress code, academic integrity, and exam policies.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📞</div>
+          <div class="feature-title">Contact & Location</div>
+          <div class="feature-desc">Office hours, campus address, and how to reach the registrar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">⚙️</div>
+        <h2>Technology Behind Iggy</h2>
+      </div>
+      <p>Iggy is powered by a modern web-based architecture combining a responsive front-end, an intelligent NLP engine, and a reliable database system.</p>
+      <div class="tech-list">
+        <span class="tech-badge">🌐 HTML / CSS / JavaScript</span>
+        <span class="tech-badge">🐍 Python (Flask)</span>
+        <span class="tech-badge">🧠 NLP & Intent Detection</span>
+        <span class="tech-badge">🗄️ SQLite Database</span>
+        <span class="tech-badge">🔗 REST API</span>
+        <span class="tech-badge">☁️ Cloud-Ready</span>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">👥</div>
+        <h2>Meet the Team</h2>
+      </div>
+      <p>Iggy was built by a dedicated group of BS Information Technology students from ICCT Colleges, Cainta, Rizal.</p>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">EA</div>
+          <div class="team-name">Enrique Apelo</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">CC</div>
+          <div class="team-name">Chris Chales Caleb Cleofas</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">MD</div>
+          <div class="team-name">Marcial Dalangin</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">CG</div>
+          <div class="team-name">Clark Harvy Gonzales</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">JM</div>
+          <div class="team-name">Joseph Macaraeg</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">PM</div>
+          <div class="team-name">Patricia Joy Madarang</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">MM</div>
+          <div class="team-name">Mark Angelo Milo</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">CS</div>
+          <div class="team-name">Christine Jane Salaum</div>
+          <div class="team-role">Developer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">JS</div>
+          <div class="team-name">Jared Soriano</div>
+          <div class="team-role">Developer</div>
+        </div>
+      </div>
+    </div>
+    <!-- CTA -->
+    <div class="card cta-card">
+      <img src="Iggy.png" alt="Iggy" style="width:80px;height:80px;object-fit:contain;margin-bottom:16px;"/>
+      <h2>Ready to Chat with Iggy?</h2>
+      <p>Ask anything about ICCT Colleges — Iggy is online and ready to help you right now!</p>
+      <a href="index.html" class="cta-btn">💬 Start Chatting</a>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    © 2026 ICCT Colleges · Iggy Chatbot · Built by BS Information Technology Students · Cainta, Rizal, Philippines
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register – ICCT Colleges Chatbot</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #1a4fa0;
+      --primary-dark:  #0e337a;
+      --primary-light: #e8effc;
+      --accent:        #f5a623;
+      --success:       #27ae60;
+      --danger:        #e74c3c;
+      --bg:            #f4f6fb;
+      --surface:       #ffffff;
+      --border:        #dde3f0;
+      --text:          #1c1e2e;
+      --text-muted:    #6b7280;
+      --text-light:    #9ca3af;
+      --font:          'Segoe UI', system-ui, -apple-system, sans-serif;
+      --transition:    0.18s ease;
+      --radius-sm:     6px;
+      --radius-md:     10px;
+      --radius-lg:     16px;
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.08);
+      --shadow-md:     0 4px 12px rgba(0,0,0,.10);
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-logo-img { width: 36px; height: 36px; object-fit: contain; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .brand-name { font-size: 15px; font-weight: 700; letter-spacing: .3px; }
+    .brand-tagline { font-size: 11px; opacity: .75; }
+
+    .header-nav { display: flex; gap: 4px; }
+    .nav-link {
+      color: rgba(255,255,255,.8);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background var(--transition);
+    }
+    .nav-link:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+    /* ── Page body ── */
+    .page-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* Hero */
+    .login-hero { text-align: center; }
+
+    .iggy-img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 18px rgba(26,79,160,.20));
+      animation: float 3s ease-in-out infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .login-hero h1 { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .login-hero p  { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Card */
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Two-column row */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Form group */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-label { font-size: 13px; font-weight: 600; color: var(--text); }
+
+    .input-wrap { position: relative; }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(26,79,160,.10);
+    }
+
+    .form-input::placeholder { color: var(--text-light); }
+
+    /* Password toggle */
+    .toggle-pw {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--text-light);
+      padding: 2px;
+      line-height: 1;
+      transition: color var(--transition);
+    }
+    .toggle-pw:hover { color: var(--primary); }
+
+    /* Password input with toggle needs right padding */
+    .has-toggle { padding-right: 42px; }
+
+    /* Field error */
+    .field-error { font-size: 11px; color: var(--danger); display: none; }
+    .form-group.has-error .form-input  { border-color: var(--danger); background: #fff8f8; }
+    .form-group.has-error .field-error { display: block; }
+
+    /* Password strength bar */
+    .strength-wrap { margin-top: 6px; }
+    .strength-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .strength-fill {
+      height: 100%;
+      border-radius: 2px;
+      width: 0%;
+      transition: width .3s, background .3s;
+    }
+    .strength-label { font-size: 11px; color: var(--text-light); }
+
+    /* Terms */
+    .terms-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .terms-label input[type="checkbox"] {
+      accent-color: var(--primary);
+      width: 15px;
+      height: 15px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .terms-label a { color: var(--primary); text-decoration: none; font-weight: 500; }
+    .terms-label a:hover { text-decoration: underline; }
+
+    /* Alert */
+    .alert {
+      display: none;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      margin-bottom: 16px;
+      align-items: center;
+      gap: 8px;
+    }
+    .alert.show { display: flex; }
+    .alert-error   { background: #fff0f0; border: 1px solid #f5c0bb; color: var(--danger); }
+    .alert-success { background: #f0faf4; border: 1px solid #a8d9bc; color: var(--success); }
+
+    /* Submit button */
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .login-btn:hover { background: var(--primary-dark); }
+    .login-btn:active { transform: scale(.98); }
+    .login-btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+
+    .btn-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Already have account */
+    .register-text {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+    .register-text a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    .register-text a:hover { text-decoration: underline; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1c1e2e;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .3s ease;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--text-light);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 24px 18px; }
+      .form-row { grid-template-columns: 1fr; }
+      .header-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="header-brand">
+      <img src="Iggy.png" alt="Iggy" class="brand-logo-img"/>
+      <div class="brand-text">
+        <span class="brand-name">IGGY</span>
+        <span class="brand-tagline">ICCT Chatbot Support</span>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="login.html" class="nav-link">Login</a>
+    </nav>
+  </header>
+
+  <!-- ── Page ── -->
+  <div class="page-body">
+    <div class="login-wrapper">
+
+      <!-- Hero -->
+      <div class="login-hero">
+        <img src="Iggy.png" alt="Iggy the ICCT Chatbot" class="iggy-img"/>
+        <h1>Create an Account</h1>
+        <p>Join ICCT Bot — your 24/7 school assistant</p>
+      </div>
+
+      <!-- Card -->
+      <div class="login-card">
+        <div class="card-title">📝 Sign Up</div>
+
+        <!-- Alert -->
+        <div class="alert alert-error" id="register-alert" role="alert">
+          <span>⚠️</span>
+          <span id="alert-text">Something went wrong. Please try again.</span>
+        </div>
+
+        <!-- Name row -->
+        <div class="form-row">
+          <div class="form-group" id="group-firstname">
+            <label class="form-label" for="firstname">First Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="firstname" class="form-input" placeholder="Juan" autocomplete="given-name"/>
+            </div>
+            <span class="field-error">First name is required.</span>
+          </div>
+
+          <div class="form-group" id="group-lastname">
+            <label class="form-label" for="lastname">Last Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="lastname" class="form-input" placeholder="dela Cruz" autocomplete="family-name"/>
+            </div>
+            <span class="field-error">Last name is required.</span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group" id="group-email">
+          <label class="form-label" for="email">Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="email" class="form-input" placeholder="you@icct.edu.ph" autocomplete="email"/>
+          </div>
+          <span class="field-error">Please enter a valid email address.</span>
+        </div>
+
+        <!-- Student ID (optional) -->
+        <div class="form-group" id="group-studentid">
+          <label class="form-label" for="studentid">Student ID <span style="font-weight:400;color:var(--text-light)">(optional)</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">🪪</span>
+            <input type="text" id="studentid" class="form-input" placeholder="e.g. 2024-00001"/>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group" id="group-password">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input type="password" id="password" class="form-input has-toggle" placeholder="Create a password" autocomplete="new-password"/>
+            <button class="toggle-pw" type="button" id="toggle-pw1" aria-label="Show password">👁️</button>
+          </div>
+          <div class="strength-wrap">
+            <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+            <span class="strength-label" id="strength-label">Enter a password</span>
+          </div>
+          <span class="field-error">Password must be at least 8 characters.</span>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group" id="group-confirm">
+          <label class="form-label" for="confirm">Confirm Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input type="password" id="confirm" class="form-input has-toggle" placeholder="Repeat your password" autocomplete="new-password"/>
+            <button class="toggle-pw" type="button" id="toggle-pw2" aria-label="Show password">👁️</button>
+          </div>
+          <span class="field-error">Passwords do not match.</span>
+        </div>
+
+        <!-- Terms -->
+        <label class="terms-label">
+          <input type="checkbox" id="terms"/>
+          I agree to the Terms of Service and Privacy Policy of ICCT Colleges.
+        </label>
+
+        <!-- Submit -->
+        <button class="login-btn" id="register-btn" type="button">
+          <span class="btn-spinner" id="btn-spinner"></span>
+          <span id="btn-label">Create Account →</span>
+        </button>
+
+        <p class="register-text">
+          Already have an account? <a href="login.html">Sign in</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2026 ICCT Colleges · Iggy Chatbot · Built by BS Information Technology Students · Cainta, Rizal, Philippines
+  </footer>
+
+  <script>
+    // ── Helpers ──
+    function showToast(msg, duration = 3000) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), duration);
+    }
+
+    function showAlert(msg) {
+      const box = document.getElementById('register-alert');
+      box.classList.remove('alert-success');
+      box.classList.add('alert-error');
+      document.getElementById('alert-text').textContent = msg;
+      box.classList.add('show');
+    }
+
+    function showSuccess(msg) {
+      const box = document.getElementById('register-alert');
+      box.classList.remove('alert-error');
+      box.classList.add('alert-success');
+      document.getElementById('alert-text').textContent = msg;
+      box.classList.add('show');
+    }
+
+    function hideAlert() { document.getElementById('register-alert').classList.remove('show'); }
+
+    function setFieldError(groupId, show) {
+      document.getElementById(groupId).classList.toggle('has-error', show);
+    }
+
+    function setLoading(on) {
+      const btn = document.getElementById('register-btn');
+      document.getElementById('btn-spinner').style.display = on ? 'block' : 'none';
+      document.getElementById('btn-label').textContent = on ? 'Creating account…' : 'Create Account →';
+      btn.disabled = on;
+    }
+
+    // ── Password strength ──
+    document.getElementById('password').addEventListener('input', () => {
+      const val = document.getElementById('password').value;
+      const fill = document.getElementById('strength-fill');
+      const label = document.getElementById('strength-label');
+
+      let score = 0;
+      if (val.length >= 8)              score++;
+      if (/[A-Z]/.test(val))            score++;
+      if (/[0-9]/.test(val))            score++;
+      if (/[^A-Za-z0-9]/.test(val))     score++;
+
+      const levels = [
+        { w: '0%',   bg: 'transparent', text: 'Enter a password' },
+        { w: '25%',  bg: '#e74c3c',     text: 'Weak' },
+        { w: '50%',  bg: '#f5a623',     text: 'Fair' },
+        { w: '75%',  bg: '#3498db',     text: 'Good' },
+        { w: '100%', bg: '#27ae60',     text: 'Strong' },
+      ];
+
+      const lvl = val.length === 0 ? levels[0] : levels[Math.min(score, 4)];
+      fill.style.width      = lvl.w;
+      fill.style.background = lvl.bg;
+      label.textContent     = lvl.text;
+      label.style.color     = lvl.bg === 'transparent' ? 'var(--text-light)' : lvl.bg;
+    });
+
+    // ── Password toggles ──
+    function setupToggle(btnId, inputId) {
+      document.getElementById(btnId).addEventListener('click', () => {
+        const inp = document.getElementById(inputId);
+        const btn = document.getElementById(btnId);
+        if (inp.type === 'password') {
+          inp.type = 'text'; btn.textContent = '🙈';
+        } else {
+          inp.type = 'password'; btn.textContent = '👁️';
+        }
+      });
+    }
+    setupToggle('toggle-pw1', 'password');
+    setupToggle('toggle-pw2', 'confirm');
+
+    // ── Validation ──
+    function validate() {
+      const firstname = document.getElementById('firstname').value.trim();
+      const lastname  = document.getElementById('lastname').value.trim();
+      const email     = document.getElementById('email').value.trim();
+      const password  = document.getElementById('password').value;
+      const confirm   = document.getElementById('confirm').value;
+      const terms     = document.getElementById('terms').checked;
+      let ok = true;
+
+      setFieldError('group-firstname', !firstname); if (!firstname) ok = false;
+      setFieldError('group-lastname',  !lastname);  if (!lastname)  ok = false;
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      setFieldError('group-email', !emailOk); if (!emailOk) ok = false;
+
+      const pwOk = password.length >= 8;
+      setFieldError('group-password', !pwOk); if (!pwOk) ok = false;
+
+      const confirmOk = password === confirm && confirm.length > 0;
+      setFieldError('group-confirm', !confirmOk); if (!confirmOk) ok = false;
+
+      if (!terms) {
+        showAlert('Please agree to the Terms of Service to continue.');
+        ok = false;
+      }
+
+      return ok;
+    }
+
+    // ── Register handler ──
+    document.getElementById('register-btn').addEventListener('click', async () => {
+      hideAlert();
+      if (!validate()) return;
+
+      setLoading(true);
+
+      try {
+        // ── Replace this block with your real API call ──
+        // const res = await fetch('http://localhost:5000/api/register', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({
+        //     first_name: document.getElementById('firstname').value.trim(),
+        //     last_name:  document.getElementById('lastname').value.trim(),
+        //     email:      document.getElementById('email').value.trim(),
+        //     student_id: document.getElementById('studentid').value.trim(),
+        //     password:   document.getElementById('password').value,
+        //   })
+        // });
+        // const data = await res.json();
+        // if (!res.ok) throw new Error(data.message || 'Registration failed');
+        // showSuccess('✅ Account created! Redirecting to login…');
+        // setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+
+        // Demo simulation
+        const res = await fetch('http://localhost:5000/api/register', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({
+       first_name: document.getElementById('firstname').value.trim(),
+      last_name:  document.getElementById('lastname').value.trim(),
+       email:      document.getElementById('email').value.trim(),
+      student_id: document.getElementById('studentid').value.trim(),
+     password:   document.getElementById('password').value,
+   })
+  });
+const data = await res.json();
+if (!res.ok) throw new Error(data.message || 'Registration failed');
+showSuccess('✅ Account created! Redirecting to login…');
+setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+
+      } catch (err) {
+        showAlert(err.message || 'Registration failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // ── Clear errors on input ──
+    ['firstname','lastname','email','password','confirm'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        const groupMap = {
+          firstname: 'group-firstname', lastname: 'group-lastname',
+          email: 'group-email', password: 'group-password', confirm: 'group-confirm'
+        };
+        setFieldError(groupMap[id], false);
+        hideAlert();
+      });
+    });
+  </script>
+
+</body>
+</html>

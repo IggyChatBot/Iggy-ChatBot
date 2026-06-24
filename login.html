@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – ICCT Colleges Chatbot</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #1a4fa0;
+      --primary-dark:  #0e337a;
+      --primary-light: #e8effc;
+      --accent:        #f5a623;
+      --success:       #27ae60;
+      --danger:        #e74c3c;
+      --bg:            #f4f6fb;
+      --surface:       #ffffff;
+      --border:        #dde3f0;
+      --text:          #1c1e2e;
+      --text-muted:    #6b7280;
+      --text-light:    #9ca3af;
+      --font:          'Segoe UI', system-ui, -apple-system, sans-serif;
+      --transition:    0.18s ease;
+      --radius-sm:     6px;
+      --radius-md:     10px;
+      --radius-lg:     16px;
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.08);
+      --shadow-md:     0 4px 12px rgba(0,0,0,.10);
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .brand-logo-img { width: 36px; height: 36px; object-fit: contain; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .brand-name { font-size: 15px; font-weight: 700; letter-spacing: .3px; }
+    .brand-tagline { font-size: 11px; opacity: .75; }
+
+    .header-nav { display: flex; gap: 4px; }
+    .nav-link {
+      color: rgba(255,255,255,.8);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background var(--transition);
+    }
+    .nav-link:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+    /* ── Page body ── */
+    .page-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    /* ── Login card ── */
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* Mascot + greeting */
+    .login-hero {
+      text-align: center;
+    }
+
+    .iggy-img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 18px rgba(26,79,160,.20));
+      animation: float 3s ease-in-out infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .login-hero h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .login-hero p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Card */
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Form */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 42px 10px 38px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(26,79,160,.10);
+    }
+
+    .form-input::placeholder { color: var(--text-light); }
+
+    /* Password toggle */
+    .toggle-pw {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--text-light);
+      padding: 2px;
+      line-height: 1;
+      transition: color var(--transition);
+    }
+    .toggle-pw:hover { color: var(--primary); }
+
+    /* Error message */
+    .field-error {
+      font-size: 11px;
+      color: var(--danger);
+      display: none;
+    }
+    .form-group.has-error .form-input {
+      border-color: var(--danger);
+      background: #fff8f8;
+    }
+    .form-group.has-error .field-error { display: block; }
+
+    /* Options row */
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .remember-label input[type="checkbox"] {
+      accent-color: var(--primary);
+      width: 15px;
+      height: 15px;
+    }
+
+    .forgot-link {
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .forgot-link:hover { color: var(--primary-dark); text-decoration: underline; }
+
+    /* Submit button */
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .login-btn:hover { background: var(--primary-dark); }
+    .login-btn:active { transform: scale(.98); }
+    .login-btn:disabled {
+      background: var(--border);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Spinner inside button */
+    .btn-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: var(--text-light);
+      font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Guest / register links */
+    .alt-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .guest-btn {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .guest-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .register-text {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .register-text a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .register-text a:hover { text-decoration: underline; }
+
+    /* ── Alert banner (inline feedback) ── */
+    .alert {
+      display: none;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      margin-bottom: 16px;
+      align-items: center;
+      gap: 8px;
+    }
+    .alert.show { display: flex; }
+    .alert-error   { background: #fff0f0; border: 1px solid #f5c0bb; color: var(--danger); }
+    .alert-success { background: #f0faf4; border: 1px solid #a8d9bc; color: var(--success); }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--text-light);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1c1e2e;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .3s ease;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 24px 18px; }
+      .header-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="header-brand">
+      <img src="Iggy.png" alt="Iggy" class="brand-logo-img"/>
+      <div class="brand-text">
+        <span class="brand-name">IGGY</span>
+        <span class="brand-tagline">ICCT Chatbot Support</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Page ── -->
+  <div class="page-body">
+    <div class="login-wrapper">
+
+      <!-- Hero -->
+      <div class="login-hero">
+        <img src="Iggy.png" alt="Iggy the ICCT Chatbot" class="iggy-img"/>
+        <h1>Welcome back!</h1>
+        <p>Sign in to continue to ICCT Bot</p>
+      </div>
+
+      <!-- Card -->
+      <div class="login-card">
+        <div class="card-title">🔐 Sign In</div>
+
+        <!-- Inline alert -->
+        <div class="alert alert-error" id="login-alert" role="alert">
+          <span>⚠️</span>
+          <span id="alert-text">Incorrect email or password.</span>
+        </div>
+
+        <!-- Form -->
+        <div class="form-group" id="group-email">
+          <label class="form-label" for="email">Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="you@icct.edu.ph"
+              autocomplete="email"
+              aria-required="true"
+            />
+          </div>
+          <span class="field-error" id="email-error">Please enter a valid email address.</span>
+        </div>
+
+        <div class="form-group" id="group-password">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              aria-required="true"
+            />
+            <button class="toggle-pw" type="button" id="toggle-pw" aria-label="Show password" title="Show/hide password">
+              👁️
+            </button>
+          </div>
+          <span class="field-error" id="password-error">Password must be at least 6 characters.</span>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-label">
+            <input type="checkbox" id="remember-me" />
+            Remember me
+          </label>
+          <a href="#" class="forgot-link" id="forgot-link">Forgot password?</a>
+        </div>
+
+        <button class="login-btn" id="login-btn" type="button">
+          <span class="btn-spinner" id="btn-spinner"></span>
+          <span id="btn-label">Sign In →</span>
+        </button>
+
+        <div class="divider">or</div>
+
+        <div class="alt-actions">
+          <a href="index.html" class="guest-btn">💬 Continue as Guest</a>
+          <p class="register-text">
+            Don't have an account? <a href="register.html">Create one</a>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Toast ── -->
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    © 2026 ICCT Colleges · Iggy Chatbot · Built by BS Information Technology Students · Cainta, Rizal, Philippines
+  </footer>
+
+  <script>
+    // ── Helpers ──
+    function showToast(msg, duration = 3000) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), duration);
+    }
+
+    function setLoading(on) {
+      const btn = document.getElementById('login-btn');
+      const spinner = document.getElementById('btn-spinner');
+      const label = document.getElementById('btn-label');
+      btn.disabled = on;
+      spinner.style.display = on ? 'block' : 'none';
+      label.textContent = on ? 'Signing in…' : 'Sign In →';
+    }
+
+    function showAlert(msg) {
+      const box = document.getElementById('login-alert');
+      document.getElementById('alert-text').textContent = msg;
+      box.classList.add('show');
+    }
+
+    function hideAlert() {
+      document.getElementById('login-alert').classList.remove('show');
+    }
+
+    function setFieldError(groupId, show) {
+      const el = document.getElementById(groupId);
+      el.classList.toggle('has-error', show);
+    }
+
+    // ── Validate ──
+    function validate() {
+      const email = document.getElementById('email').value.trim();
+      const pw    = document.getElementById('password').value;
+      let ok = true;
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      setFieldError('group-email', !emailOk);
+      if (!emailOk) ok = false;
+
+      const pwOk = pw.length >= 6;
+      setFieldError('group-password', !pwOk);
+      if (!pwOk) ok = false;
+
+      return ok;
+    }
+
+    // ── Login handler ──
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      hideAlert();
+      if (!validate()) return;
+
+      setLoading(true);
+
+      try {
+        // ── Replace this block with your real API call ──
+        // const res  = await fetch('http://localhost:5000/api/login', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({
+        //     email:    document.getElementById('email').value.trim(),
+        //     password: document.getElementById('password').value,
+        //     remember: document.getElementById('remember-me').checked
+        //   })
+        // });
+        // const data = await res.json();
+        // if (!res.ok) throw new Error(data.message || 'Login failed');
+        // localStorage.setItem('icct_token', data.token);
+        // window.location.href = 'index.html';
+
+        // Demo: simulate a 1.2 s network call, then redirect
+        const res = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        email:    document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        remember: document.getElementById('remember-me').checked
+      })
+    });
+const data = await res.json();
+if (!res.ok) throw new Error(data.message || 'Login failed');
+
+localStorage.setItem('icct_token', data.token);
+localStorage.removeItem('icct_guest');
+window.location.href = 'index.html';
+
+      } catch (err) {
+        showAlert(err.message || 'Incorrect email or password. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // ── Password visibility toggle ──
+    document.getElementById('toggle-pw').addEventListener('click', () => {
+      const pw  = document.getElementById('password');
+      const btn = document.getElementById('toggle-pw');
+      if (pw.type === 'password') {
+        pw.type = 'text';
+        btn.textContent = '🙈';
+        btn.setAttribute('aria-label', 'Hide password');
+      } else {
+        pw.type = 'password';
+        btn.textContent = '👁️';
+        btn.setAttribute('aria-label', 'Show password');
+      }
+    });
+
+    // ── Enter key submits ──
+    ['email', 'password'].forEach(id => {
+      document.getElementById(id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('login-btn').click();
+      });
+    });
+
+    // ── Clear errors on input ──
+    document.getElementById('email').addEventListener('input', () => {
+      setFieldError('group-email', false); hideAlert();
+    });
+    document.getElementById('password').addEventListener('input', () => {
+      setFieldError('group-password', false); hideAlert();
+    });
+
+    // ── Forgot password placeholder ──
+    document.getElementById('forgot-link').addEventListener('click', e => {
+      e.preventDefault();
+      showToast('📧 Password reset — contact your administrator.');
+    });
+  </script>
+</body>
+</html>
