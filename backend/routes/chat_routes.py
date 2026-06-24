@@ -7,7 +7,7 @@ GET  /api/stats — returns interaction analytics
 from flask import Blueprint, request, jsonify, current_app, g
 import logging
 import os
-import google.generativeai as genai
+from google import genai
 
 logger = logging.getLogger(__name__)
 chat_bp = Blueprint('chat', __name__)
