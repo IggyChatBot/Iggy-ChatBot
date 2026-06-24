@@ -579,40 +579,25 @@
 
       setLoading(true);
 
-      try {
-        // ── Replace this block with your real API call ──
-        // const BASE_URL = 'https://iggy-chatbot-1-oic6.onrender.com/api'; {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({
-        //     first_name: document.getElementById('firstname').value.trim(),
-        //     last_name:  document.getElementById('lastname').value.trim(),
-        //     email:      document.getElementById('email').value.trim(),
-        //     student_id: document.getElementById('studentid').value.trim(),
-        //     password:   document.getElementById('password').value,
-        //   })
-        // });
-        // const data = await res.json();
-        // if (!res.ok) throw new Error(data.message || 'Registration failed');
-        // showSuccess('✅ Account created! Redirecting to login…');
-        // setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+      const BASE_URL = 'https://iggy-chatbot-1-oic6.onrender.com/api';
 
-        // Demo simulation
-        const BASE_URL = 'https://iggy-chatbot-1-oic6.onrender.com/api'; {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({
-       first_name: document.getElementById('firstname').value.trim(),
-      last_name:  document.getElementById('lastname').value.trim(),
-       email:      document.getElementById('email').value.trim(),
-      student_id: document.getElementById('studentid').value.trim(),
-     password:   document.getElementById('password').value,
-   })
-  });
-const data = await res.json();
-if (!res.ok) throw new Error(data.message || 'Registration failed');
-showSuccess('✅ Account created! Redirecting to login…');
-setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+      try {
+        const res = await fetch(`${BASE_URL}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            first_name: document.getElementById('firstname').value.trim(),
+            last_name:  document.getElementById('lastname').value.trim(),
+            email:      document.getElementById('email').value.trim(),
+            student_id: document.getElementById('studentid').value.trim(),
+            password:   document.getElementById('password').value,
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Registration failed');
+        showSuccess('✅ Account created! Redirecting to login…');
+        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
 
       } catch (err) {
         showAlert(err.message || 'Registration failed. Please try again.');
