@@ -15,22 +15,8 @@ chat_bp = Blueprint('chat', __name__)
 # ── Configure Gemini ────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-    gemini_model = genai.GenerativeModel(
-        model_name='gemini-1.5-flash',
-        system_instruction="""You are Iggy, the official AI chatbot mascot of ICCT Colleges in Cainta, Rizal, Philippines.
-You are a friendly, helpful school assistant who answers questions about:
-- Enrollment process and requirements
-- Courses offered (BSIT, BSCS, BSCpE, BSBA, BSA, BSN, BEEd, BSEd, SHS strands)
-- Tuition fees (approximately ₱300-₱500 per unit)
-- Scholarships (UniFAST, CHED, DSWD, institutional)
-- School policies (attendance max 20% absences, dress code)
-- Class schedules and academic calendar
-- Contact information and office hours
-
-Always be friendly, concise, and helpful. If you don't know something specific about ICCT, say so honestly and suggest they contact the school directly.
-Keep responses short and easy to read. Use bullet points when listing multiple items."""
-    )
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+    gemini_model = gemini_client
     logger.info("Gemini AI configured successfully.")
 else:
     gemini_model = None
