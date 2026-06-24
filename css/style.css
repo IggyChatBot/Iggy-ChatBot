@@ -433,8 +433,13 @@ body {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .main-layout { grid-template-columns: 1fr; padding: 10px; }
+  .main-layout { grid-template-columns: 1fr; padding: 8px; }
   .sidebar { display: none; }
-  .chat-container { height: calc(100vh - 80px); }
-  .header-nav { display: none; }
+  .chat-container { height: calc(100vh - 76px); }
+  .header-nav { display: flex; gap: 2px; }
+  .nav-link { padding: 5px 8px; font-size: 12px; }
+  .profile-btn { padding: 4px 8px 4px 4px; font-size: 12px; }
+  .input-area { padding: 8px 10px 12px; }
+  .user-input { font-size: 14px; }
+  .send-btn { width: 38px; height: 38px; }
 }
