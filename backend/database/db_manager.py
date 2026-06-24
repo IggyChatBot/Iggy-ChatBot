@@ -249,8 +249,8 @@ class DatabaseManager:
             sessions = cur.fetchone()[0]
 
         return {"total_messages": total, "unique_sessions": sessions, "top_intents": intents}
-        
-# ── User Auth ──────────────────────────────────────────────────
+
+    # ── User Auth ──────────────────────────────────────────────────
     def get_user_by_email(self, email: str) -> dict | None:
         with self._get_conn() as conn:
             cur = conn.cursor()
