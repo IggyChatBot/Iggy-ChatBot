@@ -51,7 +51,10 @@ Here is relevant information from the ICCT database:
 
 Using this information, give a helpful and friendly response as Iggy."""
 
-        response = gemini_model.generate_content(prompt)
+       response = gemini_model.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=prompt
+        )
         return response.text
     except Exception as e:
         logger.error(f"[Gemini] Error: {e}")
