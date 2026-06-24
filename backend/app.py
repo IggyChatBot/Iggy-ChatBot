@@ -20,6 +20,7 @@ from database.db_manager import DatabaseManager
 from routes.chat_routes import chat_bp
 from routes.faq_routes import faq_bp
 from routes.feedback_routes import feedback_bp
+from routes.auth_routes import auth_bp
 
 # ── App Setup ────────────────────────────────────────────────────
 app = Flask(__name__)
@@ -49,6 +50,7 @@ app.db_manager = db_manager
 app.register_blueprint(chat_bp,     url_prefix='/api')
 app.register_blueprint(faq_bp,      url_prefix='/api')
 app.register_blueprint(feedback_bp, url_prefix='/api')
+app.register_blueprint(auth_bp,     url_prefix='/api')
 
 # ── Health check ──────────────────────────────────────────────────
 @app.route('/api/health', methods=['GET'])
